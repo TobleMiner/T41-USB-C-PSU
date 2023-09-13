@@ -1,0 +1,8 @@
+T41-USB-C-PSU-backups/
+fp-info-cache
+*.xml
+*.log
+lib/3d/3rdparty/*
+*.step
+*.x3d
+~*
