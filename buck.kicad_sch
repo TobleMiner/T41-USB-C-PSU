@@ -755,7 +755,7 @@
     (property "Datasheet" "~" (at 219.71 110.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "LCSC" "243213" (at 219.71 110.49 0)
+    (property "LCSC" "C25779" (at 219.71 110.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 3f021998-7868-4e32-adcb-33afbdcb3c67))
