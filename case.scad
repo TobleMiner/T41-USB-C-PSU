@@ -69,6 +69,7 @@ module pcb_bottom_case() {
 module pcb_top_case() {
     pcb_case();
     translate([0, 0, 1.6]) {
+        translate([4.4, 9, 0]) rotate([0, 0, -90]) upstream_port(); // USB-C port extension
         translate([4.3, 9, 0]) linear_extrude(3.16 / 2) square([7.35, 8.94 + 0.1], center=true);
         translate([3, 9, 0]) linear_extrude(3.16 / 2) square([7.35, 8.94 + 0.1], center=true);
     }
