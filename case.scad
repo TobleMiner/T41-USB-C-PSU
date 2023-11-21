@@ -31,7 +31,7 @@ module upstream_port(depth=7.35) {
 
 module pcb() {
     difference() {
-        color("green") cube([50, 18, 1.6 + 0.01]);
+        color("green") translate([-0.05, -0.05, 0]) cube([50 + 0.1, 18 + 0.1, 1.6 + 0.01]);
         posts();
     };
     translate([0, 0, 1.6]) {
@@ -61,9 +61,18 @@ module pcb_case() {
 
 module pcb_bottom_case() {
     pcb_case();
-    translate([0, 0, 1.6]) {
-        cube([50, 18, 5]); // Ensure no overlap over PCB
+    translate([-0.05, -0.05, 1.6]) {
+        cube([50 + 0.1, 18 + 0.1, 5]); // Ensure no overlap over PCB
     }
+}
+
+module pcb_top_case() {
+    pcb_case();
+    translate([0, 0, 1.6]) {
+        translate([4.3, 9, 0]) linear_extrude(3.16 / 2) square([7.35, 8.94 + 0.1], center=true);
+        translate([3, 9, 0]) linear_extrude(3.16 / 2) square([7.35, 8.94 + 0.1], center=true);
+    }
+    posts();
 }
 
 module rounded_rect(x, y, z, r) {
@@ -95,7 +104,7 @@ module hex_screw() {
 module hex_screw_nut() {
     color("#ccc") {
         hex_screw();
-        translate([0, 0, 1]) hex_screw();
+        translate([0, 0, 1.5]) hex_screw();
         hex_nut();
         translate([0, 0, -0.5]) hex_nut();
     }
@@ -128,9 +137,12 @@ module bottom_case() {
 
 module top_case() {
     difference() {
-        translate([0, 0, 6]) rounded_rect(65, 30, 4, 3);
         union() {
-            translate([2, 6, 3]) pcb_case();
+            translate([2 + 0.2, 6 + 0.1, 4.6]) cube([50 - 0.4, 18 - 0.2, 1.4]);
+            translate([0, 0, 6]) rounded_rect(65, 30, 5, 3);
+        }
+        union() {
+            translate([2, 6, 3]) pcb_top_case();
             features();
             translate([60 - 5.4, 15 - 2, 0]) cylinder(8 + 0.1, r=1.5 + 0.1);
             translate([60 - 1.6, 15 + 2, 0]) cylinder(8 + 0.1, r=1.5 + 0.1);
@@ -140,6 +152,27 @@ module top_case() {
     }
 }
 
-bottom_case();
-!top_case();
+module case() {
+    //bottom_case();
+    top_case();
+}
+
+difference() {
+    case();
+    union() {
+        translate([6.5, 0, 0]) {
+            translate([0, 2, 2]) cube([47.5, 2, 6]);
+            translate([47.5, 2, 2]) cube([4.5, 5, 6]);
+            translate([0, 26, 2]) cube([47.5, 2, 6]);
+            translate([47.5, 23, 2]) cube([4.5, 5, 6]);
+        }
+        translate([0, 0, 6]) {
+            translate([12, 7 + 6, 0]) cube([7, 10, 3]);
+            translate([19, 7 + 10, 0]) cube([8, 6, 3]);
+            translate([19, 7, 0]) cube([8, 5, 3]);
+            translate([27, 7, 0]) cube([15, 16, 3]);
+            translate([47, 7, 0]) cube([5, 16, 3]);
+        }
+    }
+}
 
