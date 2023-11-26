@@ -153,27 +153,31 @@ module top_case() {
     }
 }
 
-module case() {
+module case_() {
     //bottom_case();
     top_case();
 }
 
-difference() {
-    case();
-    union() {
-        translate([6.5, 0, 0]) {
-            translate([0, 2, 2]) cube([47.5, 2, 6]);
-            translate([47.5, 2, 2]) cube([4.5, 5, 6]);
-            translate([0, 26, 2]) cube([47.5, 2, 6]);
-            translate([47.5, 23, 2]) cube([4.5, 5, 6]);
-        }
-        translate([0, 0, 6]) {
-            translate([12, 7 + 6, 0]) cube([7, 10, 3]);
-            translate([19, 7 + 10, 0]) cube([8, 6, 3]);
-            translate([19, 7, 0]) cube([8, 5, 3]);
-            translate([27, 7, 0]) cube([15, 16, 3]);
-            translate([47, 7, 0]) cube([5, 16, 3]);
+module case() {
+    difference() {
+        case_();
+        union() {
+            translate([6.5, 0, 0]) {
+                translate([0, 2, 2]) cube([47.5, 2, 6]);
+                translate([47.5, 2, 2]) cube([4.5, 5, 6]);
+                translate([0, 26, 2]) cube([47.5, 2, 6]);
+                translate([47.5, 23, 2]) cube([4.5, 5, 6]);
+            }
+            translate([0, 0, 6]) {
+                translate([12, 7 + 6, 0]) cube([7, 10, 3]);
+                translate([19, 7 + 10, 0]) cube([8, 6, 3]);
+                translate([19, 7, 0]) cube([8, 5, 3]);
+                translate([27, 7, 0]) cube([15, 16, 3]);
+                translate([47, 7, 0]) cube([5, 16, 3]);
+            }
         }
     }
 }
 
+case();
+//rotate([180, 0, 0]) case();
