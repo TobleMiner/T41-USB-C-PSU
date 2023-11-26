@@ -3,4 +3,5 @@
   (lib (name "Package_Texas")(type "KiCad")(uri "${KIPRJMOD}/lib/Package_Texas.pretty")(options "")(descr ""))
   (lib (name "Package_DFN_FET")(type "KiCad")(uri "${KIPRJMOD}/lib/Package_DFN_FET.pretty")(options "")(descr ""))
   (lib (name "ToolingHole")(type "KiCad")(uri "${KIPRJMOD}/lib/ToolingHole.pretty")(options "")(descr ""))
+  (lib (name "Case")(type "KiCad")(uri "${KIPRJMOD}/lib/Case.pretty")(options "")(descr ""))
 )
