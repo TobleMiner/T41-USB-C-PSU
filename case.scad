@@ -1,7 +1,7 @@
 $fn = 100;
 
 module post(height=1.6) {
-    cylinder(height, d=2.2 - 0.1);
+    cylinder(height, d=2.2 - 0.7);
 }
 
 module posts(height=1.6) {
@@ -13,8 +13,8 @@ module posts(height=1.6) {
 }
 
 module upstream_port(depth=7.35) {
-    width = 8.94 + 0.1;
-    height = 3.16 + 0.1;
+    width = 9 + 0.6;
+    height = 3.2 + 0.4;
     color("#bbb") translate([-width/2, -4.84 - (depth - 7.35), 0]) {
         translate([height/4, 0, height/4]) {
             translate([0, depth/2, 0]) rotate([90, 0, 0]) cylinder(depth, d=height/2, center=true);
@@ -31,17 +31,18 @@ module upstream_port(depth=7.35) {
 
 module pcb() {
     difference() {
-        color("green") translate([-0.05, -0.05, 0]) cube([50 + 0.1, 18 + 0.1, 1.6 + 0.01]);
+        color("green") translate([-0.3, -0.3, 0]) cube([50 + 0.2 + 0.6, 18 + 0.6, 1.6 + 0.1]);
         posts();
     };
     translate([0, 0, 1.6]) {
-        translate([29.946, 12.114, 0]) color("#666") linear_extrude(3.7 + 0.5) square([9, 9.5], center=true); // Inductor
-        translate([4.3, 9, 0]) rotate([0, 0, -90]) upstream_port(); // USB-C port
+        translate([29.946, 12.114, 0]) color("#666") linear_extrude(3.7 + 1) square([9, 9.5], center=true); // Inductor
+        translate([4.3, 9, -0.05]) rotate([0, 0, -90]) upstream_port(); // USB-C port
+        translate([4.3, 9, 0.3]) rotate([0, 0, -90]) upstream_port(); // USB-C port
         translate([4, 1, 0]) cube([46, 16, 2]); // SMD components
         translate([9.7, 10.2, 0]) color("#333") linear_extrude(3) square([3.5, 7], center=true); // TVS diode
         translate([6.5, 2.3, 0]) linear_extrude(2) square([3.6, 3.7], center=true);
     }
-    translate([0, 0, -1]) {
+    translate([0, 0, -(1 - 0.05)]) {
         difference() {
             union() {
                 translate([3, 2, 0]) cube([47, 14, 1.1]); // Thermal pad
@@ -55,14 +56,16 @@ module pcb() {
 module pcb_case() {
     pcb();
     translate([0, 0, 1.6]) {
-        translate([2, 9, 0]) rotate([0, 0, -90]) upstream_port(); // USB-C port extension
+        translate([2, 9, -0.05]) rotate([0, 0, -90]) upstream_port(); // USB-C port extension
+        translate([2, 9, -0.3]) rotate([0, 0, -90]) upstream_port(); // USB-C port extension
+        translate([2, 9, 0.1]) rotate([0, 0, -90]) upstream_port(); // USB-C port extension
     }
 }
 
 module pcb_bottom_case() {
     pcb_case();
-    translate([-0.05, -0.05, 1.6]) {
-        cube([50 + 0.1, 18 + 0.1, 5]); // Ensure no overlap over PCB
+    translate([-0.3, -0.3, 1.6]) {
+        cube([50 + 0.2 + 0.6, 18 + 0.6, 5]); // Ensure no overlap over PCB
     }
 }
 
@@ -94,17 +97,17 @@ module hexagon(h, r) {
 }
 
 module hex_nut() {
-    hexagon(1.6, 4.32/2);
+    hexagon(2.1, (4.7 + 0.6) / 2);
 }
 
 module hex_screw() {
-    translate([0, 0, 7.7]) cylinder(1.9, d=3.7);
-    cylinder(9.6, d=2.2);
+    translate([0, 0, 7.7]) cylinder(1.9, d=3.9 + 0.6);
+    cylinder(9.6, d=2.4 + 0.2);
 }
 
 module hex_screw_nut() {
     color("#ccc") {
-        hex_screw();
+        translate([0, 0, 0.5]) hex_screw();
         translate([0, 0, 1.5]) hex_screw();
         hex_nut();
         translate([0, 0, -0.5]) hex_nut();
@@ -128,39 +131,60 @@ module bottom_case() {
         union() {
             translate([2, 6, 3]) pcb_bottom_case();
             features();
-            translate([53, 9, 3 + 1.6]) cube([20, 12, 3]); // Connection area
+            translate([53, 9, 3 + 1.6 - 0.6]) cube([20, 12, 3]); // Connection area
         }
     }
-    translate([60 - 5.4, 15 - 2, 0]) cylinder(8, r=1.5);
-    translate([60 - 1.6, 15 + 2, 0]) cylinder(8, r=1.5);
-    translate([60 + 2.2, 15 - 2, 0]) cylinder(8, r=1.5);
+    translate([60 - 5.4, 15 - 2.5, 0]) {
+        cylinder(8, r=1.5);
+        translate([-1.5, -3.5, 0]) cube([3, 3.5, 6]);
+        translate([-1.5, -3.2, 6]) cube([3, 3.1, 2]);
+    }
+    translate([60 - 1.6, 15 + 2.5, 0]) {
+        cylinder(8, r=1.5);
+        translate([-1.5, 0, 0]) cube([3, 3.5, 6]);
+        translate([-1.5, 0, 6]) cube([3, 3.1, 2]);
+    }
+    translate([60 + 2.2, 15 - 2.5, 0]) {
+        cylinder(8, r=1.5);
+        translate([-1.5, -3.5, 0]) cube([3, 3.5, 6]);
+        translate([-1.5, -3.2, 6]) cube([3, 3.1, 2]);
+    }
 }
 
 module top_case() {
     difference() {
         union() {
-            translate([2 + 0.2, 6 + 0.1, 4.6]) cube([50 - 0.4, 18 - 0.2, 1.4]);
+            translate([2 + 0.4, 6 + 0.4, 4.6]) cube([50 - 0.8, 18 - 0.8, 1.4]);
             translate([0, 0, 6]) rounded_rect(65, 30, 5, 3);
         }
         union() {
             translate([2, 6, 3]) pcb_top_case();
             features();
-            translate([60 - 5.4, 15 - 2, 0]) cylinder(8 + 0.1, r=1.5 + 0.1);
-            translate([60 - 1.6, 15 + 2, 0]) cylinder(8 + 0.1, r=1.5 + 0.1);
-            translate([60 + 2.2, 15 - 2, 0]) cylinder(8 + 0.1, r=1.5 + 0.1);
-            translate([53, 9, 3 + 1.6]) cube([20, 12, 3]); // Connection area
+            translate([60 - 5.4, 15 - 2.5, 0]) {
+                cylinder(8 + 0.3, r=1.5 + 0.3);
+                translate([-1.8, -3.5, 0]) cube([3.6, 3.5, 8 + 0.3]);
+            }
+            translate([60 - 1.6, 15 + 2.5, 0]) {
+                cylinder(8 + 0.3, r=1.5 + 0.3);
+                translate([-1.8, 0, 0]) cube([3.6, 3.5, 8 + 0.3]);
+            }
+            translate([60 + 2.2, 15 - 2.5, 0]) {
+                cylinder(8 + 0.3, r=1.5 + 0.3);
+                translate([-1.8, -3.5, 0]) cube([3.6, 3.5, 8 + 0.3]);
+            }
+            translate([53, 9, 3 + 1.6]) cube([20, 12, 3 - 0.4]); // Connection area
         }
     }
 }
 
-module case_() {
-    //bottom_case();
-    top_case();
+module case_(bottom, top) {
+    if (bottom) bottom_case();
+    if (top) top_case();
 }
 
-module case() {
+module case(bottom=true, top=true) {
     difference() {
-        case_();
+        case_(bottom, top);
         union() {
             translate([6.5, 0, 0]) {
                 translate([0, 2, 2]) cube([47.5, 2, 6]);
@@ -179,5 +203,9 @@ module case() {
     }
 }
 
-case();
-//rotate([180, 0, 0]) case();
+//case(true, false);
+//case(true, false);
+translate([0, -5, 11]) rotate([180, 0, 0]) case(false, true);
+
+// Only connection area
+//intersection() { case(); translate([50, 0, 0]) cube([50, 50, 50]); }
